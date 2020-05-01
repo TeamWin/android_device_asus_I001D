@@ -46,7 +46,6 @@ TARGET_USES_UEFI := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 androidboot.usbcontroller=a600000.dwc3
-BOARD_KERNEL_CMDLINE += skip_override androidboot.fastboot=1
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 TARGET_PREBUILT_KERNEL := device/asus/I001D/prebuilt/Image.gz-dtb
@@ -94,7 +93,6 @@ RECOVERY_SDCARD_ON_DATA := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_EXCLUDE_SUPERSU := true
 TW_EXTRA_LANGUAGES := true
 TW_INCLUDE_NTFS_3G := true
 AB_OTA_UPDATER := true
@@ -102,11 +100,13 @@ TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_MAX_BRIGHTNESS := 255
 TW_DEFAULT_BRIGHTNESS := 120
 TW_THEME := portrait_hdpi
-TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
+TARGET_RECOVERY_DEVICE_MODULES += tzdata update_engine_sideload
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_OUT)/usr/share/zoneinfo/tzdata
+TARGET_RECOVERY_DEVICE_MODULES += android.hidl.base@1.0 bootctrl.$(TARGET_BOARD_PLATFORM) libicuuc libion libprocinfo libxml2
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_OUT)/lib64/android.hidl.base@1.0.so $(TARGET_OUT_SHARED_LIBRARIES)/libicuuc.so $(TARGET_OUT_SHARED_LIBRARIES)/libion.so $(TARGET_OUT_SHARED_LIBRARIES)/libprocinfo.so $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TW_SCREEN_BLANK_ON_BOOT := true
-TW_USE_TOOLBOX := true
 
 # Use mke2fs to create ext4 images
 TARGET_USES_MKE2FS := true
@@ -119,9 +119,10 @@ AB_OTA_PARTITIONS += \
     system \
     vendor \
     vbmeta \
-    dtbo 
+    dtbo
 
 # Encryption
+PLATFORM_VERSION := 16.1.0
 PLATFORM_SECURITY_PATCH := 2099-12-31
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_CRYPTO_FBE := true
@@ -129,15 +130,8 @@ BOARD_USES_METADATA_PARTITION := true
 
 # Extras
 BOARD_SUPPRESS_SECURE_ERASE := true
-TW_USE_LEDS_HAPTICS := true
-USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := device/asus/I001D/installer
-TW_EXCLUDE_TWRPAPP := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_HAS_EDL_MODE := true
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
 
-#BOARD_CUSTOM_BOOTIMG_MK := device/asus/I001D/custombootimg.mk
-#LZMA_RAMDISK_TARGETS := recovery
-PLATFORM_VERSION := 16.1.0

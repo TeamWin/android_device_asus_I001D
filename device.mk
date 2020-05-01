@@ -3,6 +3,7 @@ LOCAL_PATH := device/asus/I001D
 
 # define hardware platform
 PRODUCT_PLATFORM := msmnile
+TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
 
 #TEST
 # A/B support
@@ -13,7 +14,7 @@ PRODUCT_PACKAGES += \
     update_verifier
 
 PRODUCT_PACKAGES += \
-    bootctrl.msmnile
+    bootctrl.$(PRODUCT_PLATFORM)
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -24,16 +25,13 @@ AB_OTA_POSTINSTALL_CONFIG += \
 # Enable update engine sideloading by including the static version of the
 # boot_control HAL and its dependencies.
 PRODUCT_STATIC_BOOT_CONTROL_HAL := \
-    bootctrl.msmnile \
+    bootctrl.$(PRODUCT_PLATFORM) \
     libgptutils \
     libz \
     libcutils
 
-
 # Boot control HAL
 PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service \
-
-
+    android.hardware.boot@1.0-service
 
