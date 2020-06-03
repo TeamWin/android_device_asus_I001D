@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a27c8aec_7f9e2513",
+        "filename": "recovery/root/init.recovery.qcom_decrypt.fbe.rc",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 32
+      },
+      "writtenOn": "2020-06-03T21:31:15Z",
+      "side": 1,
+      "message": "Will need to uncomment these lines once the code in partitionmanager is fixed",
+      "revId": "2fee076c400d81958c269d29eac53eb1376c5427",
+      "serverId": "9c1c7d72-6534-4d44-b0ea-39f63e804833",
+      "unresolved": true
+    }
+  ]
+}
