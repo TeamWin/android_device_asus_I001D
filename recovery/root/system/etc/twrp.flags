@@ -1,0 +1,23 @@
+# mount point    fstype    device                device2               flags
+/boot            emmc     /dev/block/bootdevice/by-name/boot           flags=slotselect
+/system_root     ext4     /dev/block/bootdevice/by-name/system         flags=slotselect;backup=0
+/system_image    emmc     /dev/block/bootdevice/by-name/system         flags=slotselect
+/vbmeta          emmc     /dev/block/bootdevice/by-name/vbmeta         flags=slotselect;display="VBMeta";backup=1;flashimg=1
+/vendor          ext4     /dev/block/bootdevice/by-name/vendor         flags=slotselect;display="Vendor";backup=0;wipeingui
+/vendor_image    emmc     /dev/block/bootdevice/by-name/vendor         flags=slotselect
+/dtbo            emmc     /dev/block/bootdevice/by-name/dtbo           flags=slotselect;display="DTBO";backup=1;flashimg=1
+/firmware        vfat     /dev/block/bootdevice/by-name/modem          flags=slotselect;display="Firmware";mounttodecrypt;fsflags=ro
+/persist         ext4     /dev/block/bootdevice/by-name/persist        flags=display="Persist"
+/persist_image   emmc     /dev/block/bootdevice/by-name/persist        flags=display="Persist"
+/modem           emmc     /dev/block/bootdevice/by-name/modem          flags=slotselect;backup=1;display="Modem"
+/bluetooth       emmc     /dev/block/bootdevice/by-name/bluetooth      flags=slotselect;backup=1;subpartitionof=/modem
+/dsp             emmc     /dev/block/bootdevice/by-name/dsp            flags=slotselect;backup=1;subpartitionof=/modem
+/efs1            emmc     /dev/block/bootdevice/by-name/modemst1       flags=backup=1;display=EFS
+/efs2            emmc     /dev/block/bootdevice/by-name/modemst2       flags=backup=1;subpartitionof=/efs1
+/efsc            emmc     /dev/block/bootdevice/by-name/fsc            flags=backup=1;subpartitionof=/efs1
+/efsg            emmc     /dev/block/bootdevice/by-name/fsg            flags=backup=1;subpartitionof=/efs1
+/asusfw          ext4     /dev/block/bootdevice/by-name/asusfw         flags=slotselect;display="ASUS-specific Firmware";backup=1;fsflags="ro,nosuid,noatime,nodev,barrier=1,noauto_da_alloc"
+/xrom            ext4     /dev/block/bootdevice/by-name/xrom           flags=slotselect;display="ASUS Extra ROM Files";fsflags="ro,nosuid,noatime,nodev,barrier=1,noauto_da_alloc"
+
+# Removable storage
+/usbstorage      vfat    /dev/block/sdh1            /dev/block/sdh     flags=fsflags=utf8;display="USB Storage";storage;wipeingui;removable
