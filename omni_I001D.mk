@@ -17,30 +17,15 @@
 # Release name
 PRODUCT_RELEASE_NAME := I001D
 
-$(call inherit-product, build/target/product/embedded.mk)
-
 # Inherit from our custom product configuration
 $(call inherit-product, vendor/omni/config/common.mk)
 
-# Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/asus/I001D/device.mk)
-
 ## Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := I001D
-PRODUCT_NAME := omni_I001D
+PRODUCT_DEVICE := $(PRODUCT_RELEASE_NAME)
+PRODUCT_NAME := omni_$(PRODUCT_DEVICE)
 PRODUCT_BRAND := asus
-PRODUCT_MODEL := ASUS_I001D
-PRODUCT_MANUFACTURER := asus
+PRODUCT_MODEL := $(shell echo $(PRODUCT_BRAND) | tr  '[:lower:]' '[:upper:]')_$(PRODUCT_DEVICE)
+PRODUCT_MANUFACTURER := $(PRODUCT_BRAND)
 
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRODUCT_NAME=WW_I001D \
-    BUILD_PRODUCT=ZS660KL \
-    TARGET_DEVICE=ASUS_I001_1
-
-PRODUCT_SYSTEM_PROPERTY_BLACKLIST += \
-    ro.bootimage.build.date.utc \
-    ro.build.date.utc
-
-# HACK: Set vendor patch level
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.security_patch=2099-12-31
+# Inherit from hardware-specific part of the product configuration
+$(call inherit-product, device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)/device.mk)

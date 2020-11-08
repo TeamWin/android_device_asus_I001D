@@ -23,6 +23,9 @@
 # *not* include it on all devices, so it is safe even with hardware-specific
 # components.
 
+# Default device path
+LOCAL_PATH := device/$(PRODUCT_BRAND)/$(TARGET_DEVICE)
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-2a
@@ -34,7 +37,7 @@ TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a75
+TARGET_2ND_CPU_VARIANT := $(TARGET_CPU_VARIANT)
 
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
@@ -45,15 +48,28 @@ TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 androidboot.usbcontroller=a600000.dwc3
+BOARD_KERNEL_CMDLINE := \
+    androidboot.console=ttyMSM0 \
+    androidboot.hardware=qcom \
+    androidboot.memcg=1 \
+    androidboot.usbcontroller=a600000.dwc3 \
+    console=ttyMSM0,115200n8 \
+    firmware_class.path=/vendor/firmware_mnt/image \
+    loop.max_part=7 \
+    lpm_levels.sleep_disabled=1 \
+    msm_rtb.filter=0x237 \
+    service_locator.enable=1 \
+    swiotlb=2048 \
+    video=vfb:640x400,bpp=32,memsize=3072000
 BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 4096
-TARGET_PREBUILT_KERNEL := device/asus/I001D/prebuilt/Image.gz-dtb
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/$(BOARD_KERNEL_IMAGE_NAME)
 
 # Platform
-TARGET_BOARD_PLATFORM := msmnile
+TARGET_BOARD_PLATFORM := $(TARGET_BOOTLOADER_BOARD_NAME)
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno640
-QCOM_BOARD_PLATFORMS += msmnile
+QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144
@@ -74,14 +90,13 @@ TARGET_NO_RECOVERY := false
 BOARD_USES_RECOVERY_AS_BOOT := true
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 
-
 # Workaround for error copying vendor files to recovery ramdisk
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
 
-#Init
-TARGET_INIT_VENDOR_LIB := libinit_I001D
-TARGET_RECOVERY_DEVICE_MODULES := libinit_I001D
+# Init
+TARGET_INIT_VENDOR_LIB := libinit_$(TARGET_DEVICE)
+TARGET_RECOVERY_DEVICE_MODULES := libinit_$(TARGET_DEVICE)
 
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
@@ -95,13 +110,27 @@ TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_EXTRA_LANGUAGES := true
 TW_INCLUDE_NTFS_3G := true
+TW_INCLUDE_RESETPROP := true
 AB_OTA_UPDATER := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_MAX_BRIGHTNESS := 255
 TW_DEFAULT_BRIGHTNESS := 120
 TW_THEME := portrait_hdpi
-TARGET_RECOVERY_DEVICE_MODULES += android.hidl.base@1.0 bootctrl.$(TARGET_BOARD_PLATFORM) libicuuc libion libprocinfo libxml2 tzdata update_engine_sideload
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.base@1.0.so $(TARGET_OUT_SHARED_LIBRARIES)/libicuuc.so $(TARGET_OUT_SHARED_LIBRARIES)/libion.so $(TARGET_OUT_SHARED_LIBRARIES)/libprocinfo.so $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so $(TARGET_OUT)/usr/share/zoneinfo/tzdata
+TARGET_RECOVERY_DEVICE_MODULES += \
+    android.hardware.boot@1.0-service \
+    android.hidl.base@1.0 \
+    bootctrl.$(TARGET_BOARD_PLATFORM) \
+    libicuuc \
+    libion \
+    libprocinfo \
+    libxml2
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.base@1.0.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libicuuc.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libprocinfo.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
+    $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/android.hardware.boot@1.0-service
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TW_SCREEN_BLANK_ON_BOOT := true
@@ -124,8 +153,8 @@ AB_OTA_PARTITIONS += \
 PLATFORM_VERSION := 16.1.0
 PLATFORM_SECURITY_PATCH := 2099-12-31
 TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_CRYPTO_FBE := true
 BOARD_USES_METADATA_PARTITION := true
+BOARD_USES_QCOM_FBE_DECRYPTION := true
 
 # Extras
 TW_HAPTICS_TSPDRV := true
@@ -133,12 +162,9 @@ BOARD_SUPPRESS_SECURE_ERASE := true
 USE_COMMON_BOOTCTRL := true
 USE_COMMON_GPTUTILS := true
 USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := device/asus/I001D/installer
+RECOVERY_INSTALLER_PATH := bootable/recovery/installer
 TW_EXCLUDE_TWRPAPP := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_HAS_EDL_MODE := true
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
-
-#BOARD_CUSTOM_BOOTIMG_MK := device/asus/I001D/custombootimg.mk
-#LZMA_RAMDISK_TARGETS := recovery
