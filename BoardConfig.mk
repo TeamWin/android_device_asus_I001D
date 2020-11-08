@@ -23,6 +23,9 @@
 # *not* include it on all devices, so it is safe even with hardware-specific
 # components.
 
+# Default device path
+DEVICE_PATH := device/$(PRODUCT_BRAND)/$(TARGET_DEVICE)
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-2a
@@ -34,26 +37,40 @@ TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a75
+TARGET_2ND_CPU_VARIANT := $(TARGET_CPU_VARIANT)
 
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := msmnile
+TARGET_BOOTLOADER_BOARD_NAME := $(PRODUCT_PLATFORM)
 TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 androidboot.usbcontroller=a600000.dwc3
+BOARD_KERNEL_CMDLINE := \
+    androidboot.console=ttyMSM0 \
+    androidboot.hardware=qcom \
+    androidboot.memcg=1 \
+    androidboot.usbcontroller=a600000.dwc3 \
+    console=ttyMSM0,115200n8 \
+    firmware_class.path=/vendor/firmware_mnt/image \
+    loop.max_part=7 \
+    lpm_levels.sleep_disabled=1 \
+    msm_rtb.filter=0x237 \
+    service_locator.enable=1 \
+    swiotlb=2048 \
+    video=vfb:640x400,bpp=32,memsize=3072000
 BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 4096
-TARGET_PREBUILT_KERNEL := device/asus/I001D/prebuilt/Image.gz-dtb
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/$(BOARD_KERNEL_IMAGE_NAME)
 
 # Platform
-TARGET_BOARD_PLATFORM := msmnile
+TARGET_BOARD_PLATFORM := $(TARGET_BOOTLOADER_BOARD_NAME)
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno640
-QCOM_BOARD_PLATFORMS += msmnile
+TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
+QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144
@@ -70,75 +87,75 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 TARGET_NO_KERNEL := false
-TARGET_NO_RECOVERY := false
-BOARD_USES_RECOVERY_AS_BOOT := true
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 
+# Use mke2fs to create ext4 images
+TARGET_USES_MKE2FS := true
 
 # Workaround for error copying vendor files to recovery ramdisk
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
 
-#Init
-TARGET_INIT_VENDOR_LIB := libinit_I001D
-TARGET_RECOVERY_DEVICE_MODULES := libinit_I001D
+# Encryption
+TW_INCLUDE_CRYPTO := true
+BOARD_USES_METADATA_PARTITION := true
+BOARD_USES_QCOM_FBE_DECRYPTION := true
+
+# Extras
+BOARD_SUPPRESS_SECURE_ERASE := true
+USE_COMMON_BOOTCTRL := true
+USE_COMMON_GPTUTILS := true
 
 # Recovery
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_USES_RECOVERY_AS_BOOT := true
+TARGET_NO_RECOVERY := false
+TARGET_RECOVERY_DEVICE_MODULES += \
+    android.hardware.boot@1.0-service \
+    android.hidl.base@1.0 \
+    libicuuc \
+    libion \
+    libprocinfo \
+    libxml2
+TARGET_RECOVERY_QCOM_RTC_FIX := true
 
 # TWRP specific build flags
-BOARD_HAS_NO_REAL_SDCARD := true
-RECOVERY_SDCARD_ON_DATA := true
-TARGET_RECOVERY_QCOM_RTC_FIX := true
+TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+TW_DEFAULT_BRIGHTNESS := 120
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_EXTRA_LANGUAGES := true
+TW_HAPTICS_TSPDRV := true
+TW_HAS_EDL_MODE := true
 TW_INCLUDE_NTFS_3G := true
-AB_OTA_UPDATER := true
+TW_INCLUDE_REPACKTOOLS := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 120
-TW_THEME := portrait_hdpi
-TARGET_RECOVERY_DEVICE_MODULES += android.hidl.base@1.0 bootctrl.$(TARGET_BOARD_PLATFORM) libicuuc libion libprocinfo libxml2 tzdata update_engine_sideload
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.base@1.0.so $(TARGET_OUT_SHARED_LIBRARIES)/libicuuc.so $(TARGET_OUT_SHARED_LIBRARIES)/libion.so $(TARGET_OUT_SHARED_LIBRARIES)/libprocinfo.so $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so $(TARGET_OUT)/usr/share/zoneinfo/tzdata
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
-TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
-TW_SCREEN_BLANK_ON_BOOT := true
 TW_OVERRIDE_SYSTEM_PROPS := "ro.build.fingerprint=ro.system.build.fingerprint;ro.build.version.incremental"
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.base@1.0.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libicuuc.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libprocinfo.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
+    $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/android.hardware.boot@1.0-service
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_THEME := portrait_hdpi
 
-# Use mke2fs to create ext4 images
-TARGET_USES_MKE2FS := true
+ifneq ($(wildcard bootable/recovery/installer/.),)
+    USE_RECOVERY_INSTALLER := true
+    RECOVERY_INSTALLER_PATH := bootable/recovery/installer
+endif
 
-# A/B updater updatable partitions list. Keep in sync with the partition list
-# with "_a" and "_b" variants in the device. Note that the vendor can add more
-# more partitions to this list for the bootloader and radio.
-AB_OTA_PARTITIONS += \
-    boot \
-    system \
-    vendor \
-    vbmeta \
-    dtbo
-
-# Encryption
-PLATFORM_VERSION := 16.1.0
-PLATFORM_SECURITY_PATCH := 2099-12-31
-TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_CRYPTO_FBE := true
-BOARD_USES_METADATA_PARTITION := true
-
-# Extras
-TW_HAPTICS_TSPDRV := true
-BOARD_SUPPRESS_SECURE_ERASE := true
-USE_COMMON_BOOTCTRL := true
-USE_COMMON_GPTUTILS := true
-USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := device/asus/I001D/installer
-TW_EXCLUDE_TWRPAPP := true
-TW_INCLUDE_REPACKTOOLS := true
-TW_HAS_EDL_MODE := true
-TWRP_INCLUDE_LOGCAT := true
+# TWRP Debug Flags
 TARGET_USES_LOGD := true
-
-#BOARD_CUSTOM_BOOTIMG_MK := device/asus/I001D/custombootimg.mk
-#LZMA_RAMDISK_TARGETS := recovery
+TWRP_INCLUDE_LOGCAT := true
+TARGET_RECOVERY_DEVICE_MODULES += debuggerd
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_OUT_EXECUTABLES)/debuggerd
+#TARGET_RECOVERY_DEVICE_MODULES += strace
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_OUT_OPTIONAL_EXECUTABLES)/strace
+#TARGET_RECOVERY_DEVICE_MODULES += twrpdec
+#TW_RECOVERY_ADDITIONAL_RELINK_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
+#TWRP_EVENT_LOGGING := true
