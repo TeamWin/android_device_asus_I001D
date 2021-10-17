@@ -142,6 +142,7 @@ TW_INCLUDE_RESETPROP := true
 AB_OTA_UPDATER := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_MAX_BRIGHTNESS := 255
+TW_NO_EXFAT_FUSE := true
 TW_DEFAULT_BRIGHTNESS := 120
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_THEME := portrait_hdpi
@@ -151,6 +152,7 @@ TW_HAS_EDL_MODE := true
 TW_OVERRIDE_SYSTEM_PROPS := \
     "ro.build.product;ro.build.fingerprint=ro.system.build.fingerprint;ro.build.version.incremental;ro.product.device=ro.product.system.device;ro.product.model=ro.product.system.model;ro.product.name=ro.product.system.name"
 TW_HAPTICS_TSPDRV := true
+TW_LOAD_VENDOR_MODULES := "texfat.ko tntfs.ko"
 
 # TWRP Debug Flags
 TARGET_USES_LOGD := true
