@@ -170,3 +170,16 @@ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/strace
 #TARGET_RECOVERY_DEVICE_MODULES += twrpdec
 #RECOVERY_BINARY_SOURCE_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
 #TWRP_EVENT_LOGGING := true
+
+# Custom TWRP Versioning
+# device version is optional - the default value is "0" if nothing is set in device tree
+CUSTOM_TWRP_DEVICE_VERSION := 0
+
+# version prefix is optional - the default value is "LOCAL" if nothing is set in device tree
+CUSTOM_TWRP_VERSION_PREFIX := CPTB
+
+include device/common/version-info/custom_twrp_version.mk
+
+ifeq ($(CUSTOM_TWRP_VERSION),)
+CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
+endif
