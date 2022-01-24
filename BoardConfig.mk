@@ -160,6 +160,12 @@ TW_OVERRIDE_SYSTEM_PROPS := \
 TW_HAPTICS_TSPDRV := true
 TW_LOAD_VENDOR_MODULES := "texfat.ko tntfs.ko"
 
+# TWRP zip installer
+ifneq ($(wildcard bootable/recovery/installer/.),)
+    USE_RECOVERY_INSTALLER := true
+    RECOVERY_INSTALLER_PATH := bootable/recovery/installer
+endif
+
 # TWRP Debug Flags
 TARGET_USES_LOGD := true
 TWRP_INCLUDE_LOGCAT := true
@@ -172,14 +178,16 @@ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/strace
 #TWRP_EVENT_LOGGING := true
 
 # Custom TWRP Versioning
-# device version is optional - the default value is "0" if nothing is set in device tree
-CUSTOM_TWRP_DEVICE_VERSION := 0
+ifneq ($(wildcard device/common/version-info/.),)
+    # device version is optional - the default value is "0" if nothing is set in device tree
+    CUSTOM_TWRP_DEVICE_VERSION := 0
+    # version prefix is optional - the default value is "LOCAL" if nothing is set in device tree
+    CUSTOM_TWRP_VERSION_PREFIX := CPTB
 
-# version prefix is optional - the default value is "LOCAL" if nothing is set in device tree
-CUSTOM_TWRP_VERSION_PREFIX := CPTB
+    include device/common/version-info/custom_twrp_version.mk
 
-include device/common/version-info/custom_twrp_version.mk
-
-ifeq ($(CUSTOM_TWRP_VERSION),)
-CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
+    ifeq ($(CUSTOM_TWRP_VERSION),)
+        CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
+    endif
 endif
+
