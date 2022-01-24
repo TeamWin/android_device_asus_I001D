@@ -23,8 +23,6 @@
 # *not* include it on all devices, so it is safe even with hardware-specific
 # components.
 
-# Default device path
-DEVICE_PATH := device/$(PRODUCT_BRAND)/$(TARGET_DEVICE)
 
 # Architecture
 TARGET_ARCH := arm64

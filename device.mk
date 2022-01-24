@@ -43,8 +43,8 @@ PRODUCT_COPY_FILES += \
 
 # Copy modules for depmod
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/recovery/root/vendor/lib/modules/1.1/texfat.ko:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/lib/modules/1.1/texfat.ko \
-    $(LOCAL_PATH)/recovery/root/vendor/lib/modules/1.1/tntfs.ko:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/lib/modules/1.1/tntfs.ko
+    $(DEVICE_PATH)/recovery/root/vendor/lib/modules/1.1/texfat.ko:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/lib/modules/1.1/texfat.ko \
+    $(DEVICE_PATH)/recovery/root/vendor/lib/modules/1.1/tntfs.ko:$(TARGET_COPY_OUT_RECOVERY)/root/vendor/lib/modules/1.1/tntfs.ko
 
 # HIDL
 PRODUCT_PACKAGES += \
@@ -58,11 +58,11 @@ PRODUCT_PACKAGES += \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
+    $(DEVICE_PATH)
 
 # Include OEM keys for zip signature verification
 PRODUCT_EXTRA_RECOVERY_KEYS += \
-    $(LOCAL_PATH)/security/$(BOARD_VENDOR)1 \
-    $(LOCAL_PATH)/security/$(BOARD_VENDOR)2 \
-    $(LOCAL_PATH)/security/$(BOARD_VENDOR)3 \
-    $(LOCAL_PATH)/security/$(BOARD_VENDOR)4
+    $(DEVICE_PATH)/security/$(BOARD_VENDOR)1 \
+    $(DEVICE_PATH)/security/$(BOARD_VENDOR)2 \
+    $(DEVICE_PATH)/security/$(BOARD_VENDOR)3 \
+    $(DEVICE_PATH)/security/$(BOARD_VENDOR)4

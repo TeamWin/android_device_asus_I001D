@@ -13,13 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+#
 # Only the below variable(s) need to be changed!
 #
 # Define hardware platform
 PRODUCT_PLATFORM := msmnile
 
+#
+#
+#
 # The below variables will be generated automatically
+#
 #
 # Release name (automatically taken from this file's suffix)
 PRODUCT_RELEASE_NAME := $(lastword $(subst /, ,$(lastword $(subst _, ,$(firstword $(subst ., ,$(MAKEFILE_LIST)))))))
@@ -40,5 +44,8 @@ PRODUCT_BRAND := $(BOARD_VENDOR)
 PRODUCT_MODEL := $(shell echo $(PRODUCT_BRAND) | tr  '[:lower:]' '[:upper:]')_$(PRODUCT_DEVICE)
 PRODUCT_MANUFACTURER := $(PRODUCT_BRAND)
 
+# Device path for OEM device tree
+DEVICE_PATH := device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)
+
 # Inherit from hardware-specific part of the product configuration
-$(call inherit-product, device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)/device.mk)
+$(call inherit-product, $(DEVICE_PATH)/device.mk)
