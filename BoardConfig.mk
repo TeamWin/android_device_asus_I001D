@@ -157,11 +157,6 @@ TW_OVERRIDE_SYSTEM_PROPS := \
 TW_HAPTICS_TSPDRV := true
 TW_LOAD_VENDOR_MODULES := "texfat.ko tntfs.ko"
 
-# TWRP zip installer
-ifneq ($(wildcard bootable/recovery/installer/.),)
-    USE_RECOVERY_INSTALLER := true
-    RECOVERY_INSTALLER_PATH := bootable/recovery/installer
-endif
 
 # TWRP Debug Flags
 TARGET_USES_LOGD := true
@@ -173,6 +168,15 @@ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/strace
 #TARGET_RECOVERY_DEVICE_MODULES += twrpdec
 #RECOVERY_BINARY_SOURCE_FILES += $(TARGET_RECOVERY_ROOT_OUT)/sbin/twrpdec
 #TWRP_EVENT_LOGGING := true
+
+#
+# For local builds only
+#
+# TWRP zip installer
+ifneq ($(wildcard bootable/recovery/installer/.),)
+    USE_RECOVERY_INSTALLER := true
+    RECOVERY_INSTALLER_PATH := bootable/recovery/installer
+endif
 
 # Custom TWRP Versioning
 ifneq ($(wildcard device/common/version-info/.),)
@@ -187,4 +191,6 @@ ifneq ($(wildcard device/common/version-info/.),)
         CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
     endif
 endif
-
+#
+# end local build flags
+#
