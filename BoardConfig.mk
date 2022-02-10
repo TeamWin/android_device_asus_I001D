@@ -88,15 +88,15 @@ BOARD_SYSTEMIMAGE_EXTFS_INODE_COUNT := 4096
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 115601780736
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_PARTITION_SIZE := 1073741824
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-TARGET_NO_KERNEL := false
+# Filesystem
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 BOARD_ROOT_EXTRA_FOLDERS := batinfo
 
 # Workaround for error copying vendor files to recovery ramdisk
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
 
 # Encryption
@@ -173,12 +173,14 @@ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/strace
 # For local builds only
 #
 # TWRP zip installer
+# See https://gerrit.twrp.me/c/android_build/+/4964 for details
 ifneq ($(wildcard bootable/recovery/installer/.),)
     USE_RECOVERY_INSTALLER := true
     RECOVERY_INSTALLER_PATH := bootable/recovery/installer
 endif
 
 # Custom TWRP Versioning
+# See https://github.com/minimal-manifest-twrp/android_device_common_version-info for details
 ifneq ($(wildcard device/common/version-info/.),)
     # device version is optional - the default value is "0" if nothing is set in device tree
     CUSTOM_TWRP_DEVICE_VERSION := 0
