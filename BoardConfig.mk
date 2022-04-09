@@ -122,13 +122,11 @@ TARGET_NO_RECOVERY := true
 TARGET_OTA_ASSERT_DEVICE := I001D
 TARGET_RECOVERY_DEVICE_MODULES += \
     libandroidicu \
-    libdisplayconfig.qti \
     libion \
     libxml2
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
-    $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/libdisplayconfig.qti.so
+    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 
