@@ -188,9 +188,10 @@ if [ -f "$TEMPSYS/$BUILDPROP" ]; then
 	decrypt_rc="/init.recovery.qcom_decrypt.rc"
 	decrypt_fbe_rc="init.recovery.qcom_decrypt.fbe.rc"
 	recovery_fstab="/etc/recovery.fstab"
+	additional_fstab="/etc/additional.fstab"
 	if [[ "$flavor" == bliss* ]] || [[ "$flavor" == voltage* ]]; then
-		sed -i 's/,inlinecrypt//' "$recovery_fstab"
-		sed -i 's/,wrappedkey//' "$recovery_fstab"
+		sed -i 's/,inlinecrypt//' "$additional_fstab"
+		sed -i 's/,wrappedkey//' "$additional_fstab"
 		remove_section "$decrypt_rc" "android.hardware.keymaster@4.0-service-qti"
 		remove_line "$decrypt_rc" "keymaster-4-0-qti" "global"
 		remove_line "$decrypt_fbe_rc" "keymaster-4-0-qti" "global"

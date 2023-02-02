@@ -28,7 +28,6 @@
 import /init.recovery.qcom_decrypt.rc
 
 on init
-    start systemcheck
     write /sys/class/backlight/panel0-backlight/brightness 200
 
 on post-fs
@@ -37,6 +36,9 @@ on post-fs
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+on property:fstab.additional=1
+    start systemcheck
 
 # +++ ASUS_BSP : add for asus battery safety upgrade and health partition
 #mount batinfo
