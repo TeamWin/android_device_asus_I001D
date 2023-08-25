@@ -144,6 +144,7 @@ TW_INCLUDE_RESETPROP := true
 TW_QCOM_ATS_OFFSET := 1616159768500
 TW_NO_EXFAT_FUSE := true
 TW_DEFAULT_BRIGHTNESS := 120
+TW_FRAMERATE := 120
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_THEME := portrait_hdpi
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
