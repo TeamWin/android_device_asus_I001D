@@ -122,12 +122,10 @@ TARGET_NO_RECOVERY := true
 TARGET_OTA_ASSERT_DEVICE := ASUS_I001_1,I001D
 TARGET_RECOVERY_DEVICE_MODULES += \
     libion \
-    libxml2 \
     vendor.display.config@1.0 \
     vendor.display.config@2.0
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@1.0.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so
 TARGET_RECOVERY_QCOM_RTC_FIX := true
@@ -137,7 +135,6 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 TARGET_USES_MKE2FS := true
 
 # TWRP specific build flags
-TW_BACKUP_EXCLUSIONS := /data/fonts/files
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_EXTRA_LANGUAGES := true
@@ -147,6 +144,7 @@ TW_INCLUDE_RESETPROP := true
 TW_QCOM_ATS_OFFSET := 1616159768500
 TW_NO_EXFAT_FUSE := true
 TW_DEFAULT_BRIGHTNESS := 120
+TW_FRAMERATE := 120
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_THEME := portrait_hdpi
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
@@ -156,7 +154,6 @@ TW_OVERRIDE_SYSTEM_PROPS := \
     "ro.build.date.utc;ro.bootimage.build.date.utc=ro.build.date.utc;ro.odm.build.date.utc=ro.build.date.utc;ro.product.build.date.utc=ro.build.date.utc;ro.system.build.date.utc=ro.build.date.utc;ro.system_ext.build.date.utc=ro.build.date.utc;ro.vendor.build.date.utc=ro.build.date.utc;ro.build.product;ro.build.fingerprint=ro.system.build.fingerprint;ro.build.version.incremental;ro.product.device=ro.product.system.device;ro.product.model=ro.product.system.model;ro.product.name=ro.product.system.name"
 TW_HAPTICS_TSPDRV := true
 TW_LOAD_VENDOR_MODULES := "texfat.ko tntfs.ko"
-TW_USE_FSCRYPT_POLICY := 1
 
 # TWRP Debug Flags
 TARGET_USES_LOGD := true
