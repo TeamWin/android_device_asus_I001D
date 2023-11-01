@@ -1,3 +1,0 @@
-#Battery Property
-ro.charger.enable_suspend = 1
-ro.charger.disable_init_blank = 1
